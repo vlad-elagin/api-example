@@ -1,5 +1,5 @@
 const updateTask = (req, res) => {
-  console.log('UPDATING TASK');
+  console.log('UPDATING TASK'); // eslint-disable-line no-console
   res.sendStatus(200);
 }
 

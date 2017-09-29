@@ -27,7 +27,7 @@ const users = [
 ]
 
 const getStubUsers = (req, res) => {
-  console.log('GETTING USERS');
+  console.log('GETTING USERS'); // eslint-disable-line no-console
   res.send(users);
 }
 

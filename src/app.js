@@ -1,9 +1,8 @@
 import express from 'express';
-import path from 'path';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import routes from './routes';
-import db from './db/db';
+import db from './db/db'; // eslint-disable-line no-unused-vars
 
 const app = express();
 app.disable('x-powered-by');

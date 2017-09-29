@@ -2,19 +2,19 @@ import sqlite3 from 'sqlite3';
 import promisify from 'es6-promisify';
 
 const db = new sqlite3.Database('task_list');
-const dbRun = promisify(db.run);
-const dbGet = promisify(db.get);
+const dbRun = promisify(db.run, db);
+const dbGet = promisify(db.get, db);
+const dbAll = promisify(db.all, db);
 
-const prepareTables = async (db) => {
+// rewrite to be testable
+
+const prepareTables = async (dbGet, dbRun) => {
   // check existence of 'tasks' table
-  const tasksTable = await dbGet("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'");
-  console.log(tasksTable);
-  /*
-  , (err, res) => {
-    console.log('checking existence of tasks table', err, res);
-    if (!err && !res) {
+  try {
+    const tasksTable = await dbGet("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'");
+    if (!tasksTable) {
       // create table
-      db.run(`
+      dbRun(`
         CREATE TABLE tasks (
           id INTEGER,
           header TEXT,
@@ -23,22 +23,23 @@ const prepareTables = async (db) => {
           priority TEXT,
           created TEXT,
           creator TEXT,
-          isPublic INTEGER,
+          isPersonal INTEGER,
           executor TEXT,
           completed INTEGER
         )
-      `, (err, res) => {
-        console.log('creation of table tasks', err, res);
-      })
+      `);
     }
-  });*/
+  } catch (err) {
+    console.log('error', err); // eslint-disable-line no-console
+  }
 }
 
-prepareTables(db);
+prepareTables(dbGet, dbRun);
 
 export {
   prepareTables,
   dbRun,
-  dbGet
+  dbGet,
+  dbAll
 };
 export default db;
