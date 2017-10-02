@@ -8,6 +8,7 @@ import deleteTask from './api/tasks/deleteTask';
 
 // USERS CRUD
 import getStubUsers from './api/users/usersStub';
+import createUser from './api/users/createUser';
 
 const routes = Router();
 
@@ -22,6 +23,7 @@ routes.route('/api/task/')
   .delete(deleteTask);
 
 routes.route('/api/users')
-  .get(getStubUsers);
+  .get(getStubUsers)
+  .post(createUser);
 
 export default routes;

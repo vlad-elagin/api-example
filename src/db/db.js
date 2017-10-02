@@ -1,22 +1,31 @@
 import sqlite3 from 'sqlite3';
 import promisify from 'es6-promisify';
 
-const db = new sqlite3.Database('task_list');
-const dbRun = promisify(db.run, db);
-const dbGet = promisify(db.get, db);
-const dbAll = promisify(db.all, db);
+const connectToDatabase = () => {
+  let db;
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production') {
+    db = new sqlite3.Database('task_list');
+  } else if (process.env.NODE_ENV === 'test') {
+    db = new sqlite3.Database(':memory:');
+  } else {
+    throw new Error('Environment is not defined!');
+  }
+  db.pRun = promisify(db.run, db);
+  db.pGet = promisify(db.get, db);
+  db.pAll = promisify(db.all, db);
+  db.pClose = promisify(db.close, db);
+  return db;
+};
 
-// rewrite to be testable
-
-const prepareTables = async (dbGet, dbRun) => {
+const prepareTables = async (db) => {
   // check existence of 'tasks' table
   try {
-    const tasksTable = await dbGet("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'");
+    const tasksTable = await db.pGet("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'");
     if (!tasksTable) {
       // create table
-      dbRun(`
+      db.pRun(`
         CREATE TABLE tasks (
-          id INTEGER,
+          id TEXT,
           header TEXT,
           description TEXT,
           content TEXT,
@@ -32,14 +41,31 @@ const prepareTables = async (dbGet, dbRun) => {
   } catch (err) {
     console.log('error', err); // eslint-disable-line no-console
   }
-}
 
-prepareTables(dbGet, dbRun);
-
-export {
-  prepareTables,
-  dbRun,
-  dbGet,
-  dbAll
+  // check existence of 'users' table
+  try {
+    const usersTable = await db.pGet("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+    if (!usersTable) {
+      // create table
+      db.pRun(`
+        CREATE TABLE users (
+          id TEXT,
+          username TEXT,
+          email TEXT,
+          password TEXT
+        )
+      `);
+    }
+  } catch (err) {
+    console.log('error', err); // eslint-disable-line no-console
+  }
 };
+
+// create working connection for server
+const db = connectToDatabase();
+prepareTables(db);
+
+// export those functions for testing
+export { prepareTables, connectToDatabase };
+
 export default db;

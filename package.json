@@ -1,12 +1,12 @@
 {
-  "name": "express-babel",
+  "name": "ToDo-Api-Example",
   "version": "1.0.0",
-  "description": "Using latest JavaScript features on the server",
+  "description": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vmasto/express-babel.git"
+    "url": ""
   },
-  "author": "Vassilis Mastorostergios <vmasto@gmail.com>",
+  "author": "Vlad Elagin",
   "license": "MIT",
   "main": "dist/index.js",
   "engines": {
@@ -15,43 +15,35 @@
   },
   "scripts": {
     "prestart": "npm run -s build",
-    "start": "node dist/index.js",
+    "start": "NODE_ENV=development node dist/index.js",
     "dev": "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
     "clean": "rimraf dist",
     "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
-    "test": "jest --watch",
-    "lint": "esw -w src test"
+    "test": "NODE_ENV=test jest -i test",
+    "lint": "eslint src test"
   },
-  "keywords": [
-    "express",
-    "babel",
-    "boilerplate",
-    "scaffold",
-    "es6",
-    "es2015",
-    "es2016",
-    "es2017",
-    "jest",
-    "eslint"
-  ],
   "dependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.4.0",
+    "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.17.1",
     "es6-promisify": "^5.0.0",
     "express": "^4.15.2",
     "morgan": "^1.7.0",
     "rimraf": "^2.6.1",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "type-check": "^0.3.2",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-jest": "^21.0.2",
     "babel-register": "^6.24.1",
     "dotenv": "^4.0.0",
-    "eslint": "^4.6.1",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint": "^4.8.0",
+    "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jest": "^21.0.2",
     "eslint-watch": "^3.1.0",
     "jest": "^21.0.2",
@@ -88,7 +80,8 @@
       "jest": true
     },
     "extends": [
-      "eslint:recommended"
+      "eslint:recommended",
+      "airbnb-base"
     ],
     "rules": {
       "jest/no-focused-tests": 2,
@@ -96,7 +89,8 @@
     }
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": ["dist"]
   },
   "directories": {
     "test": "test"
