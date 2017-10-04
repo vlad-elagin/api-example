@@ -1,11 +1,10 @@
 import { typeCheck } from 'type-check';
 import * as uuid from 'uuid';
 import bcrypt from 'bcrypt-nodejs';
-import { requestTypes } from './../../helpers/requestTypes';
-import db from './../../db/db';
+import requestTypes from './../../helpers/requestTypes';
+import app from './../../app';
 
 const createUser = async (req, res) => {
-  console.log('CREATING USER'); // eslint-disable-line no-console
   // check request data
   if (!req.body || !Object.keys(req.body).length) {
     res.status(400).send('No data sent.');
@@ -18,16 +17,16 @@ const createUser = async (req, res) => {
     email: Email
   }`, req.body, { customTypes: { ...requestTypes } });
   if (!isValidRequest) {
-    res.status(400).send('Data is invalid, check your validation services');
+    res.status(400).send('Data is invalid, check your validation services.');
     return;
   }
   // check username and email existence
   try {
-    const user = await db.pGet(`
+    const user = await app.db.pGet(`
       SELECT id FROM users
       WHERE username="${req.body.username}" OR email="${req.body.email}"`);
     if (user) {
-      res.status(400).send('Username or email are already taken');
+      res.status(400).send('Username or email are already taken.');
       return;
     }
   } catch (err) {
@@ -42,7 +41,7 @@ const createUser = async (req, res) => {
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password),
     };
-    await db.pRun(`
+    await app.db.pRun(`
       INSERT INTO USERS (id, username, email, password)
       VALUES (
         "${newUser.id}",
@@ -51,7 +50,7 @@ const createUser = async (req, res) => {
         "${newUser.password}"
       )
     `);
-    const response = await db.pGet(`SELECT * FROM users WHERE id='${newUser.id}'`);
+    const response = await app.db.pGet(`SELECT * FROM users WHERE id='${newUser.id}'`);
     delete response.password;
     res.status(200).send(response);
   } catch (err) {

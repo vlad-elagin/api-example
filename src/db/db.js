@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3';
 import promisify from 'es6-promisify';
+import app from './../app';
 
 const connectToDatabase = () => {
   let db;
@@ -59,6 +60,9 @@ const prepareTables = async (db) => {
   } catch (err) {
     console.log('error', err); // eslint-disable-line no-console
   }
+
+  app.db = db;
+  app.emit('database_ready');
 };
 
 // create working connection for server

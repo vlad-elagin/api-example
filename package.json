@@ -90,7 +90,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["dist"]
+    "modulePathIgnorePatterns": ["dist"],
+    "setupFiles": ["./src/db/db.js"]
   },
   "directories": {
     "test": "test"

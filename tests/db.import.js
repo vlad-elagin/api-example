@@ -20,7 +20,7 @@ const usersSchema = {
   password: 'TEXT',
 };
 
-describe('Preparing DB tables at first run', () => {
+const prepareDatabaseTest = () => {
   // create brand new DB connection to test prepareTables function
   let db = null;
   beforeEach(() => {
@@ -55,4 +55,6 @@ describe('Preparing DB tables at first run', () => {
     const schema = Object.assign(...rawSchema.map(column => ({ [column.name]: column.type })));
     expect(schema).toEqual(usersSchema);
   });
-});
+};
+
+export default prepareDatabaseTest;
