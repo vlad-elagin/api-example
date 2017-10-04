@@ -1,6 +1,11 @@
+import app from './../../app';
+
 const getUsers = async (req, res) => {
-  console.log('GETTING USERS'); // eslint-disable-line no-console
-  res.sendStatus(200);
+  const users = await app.db.pAll(`
+    SELECT DISTINCT id, username, email
+    FROM users
+  `);
+  res.status(200).send(users);
 };
 
 export default getUsers;

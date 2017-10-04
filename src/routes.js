@@ -7,14 +7,20 @@ import updateTask from './api/tasks/updateTask';
 import deleteTask from './api/tasks/deleteTask';
 
 // USERS CRUD
+import getUsers from './api/users/getUsers';
 import getStubUsers from './api/users/usersStub';
 import createUser from './api/users/createUser';
+
+// AUTH CRUD
+import loginUser from './api/auth/login';
 
 const routes = Router();
 
 routes.get('/', (req, res) => {
   res.sendStatus(200);
 });
+
+routes.post('/api/login', loginUser);
 
 routes.route('/api/task/')
   .get(getTasks)
@@ -23,7 +29,10 @@ routes.route('/api/task/')
   .delete(deleteTask);
 
 routes.route('/api/users')
-  .get(getStubUsers)
+  .get(getUsers)
   .post(createUser);
+
+// temp
+routes.get('/api/userstub', getStubUsers);
 
 export default routes;
