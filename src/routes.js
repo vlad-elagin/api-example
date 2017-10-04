@@ -21,6 +21,7 @@ routes.get('/', (req, res) => {
 });
 
 routes.post('/api/login', loginUser);
+routes.post('/api/register/', createUser);
 
 routes.route('/api/task/')
   .get(getTasks)
@@ -29,8 +30,7 @@ routes.route('/api/task/')
   .delete(deleteTask);
 
 routes.route('/api/users')
-  .get(getUsers)
-  .post(createUser);
+  .get(getUsers);
 
 // temp
 routes.get('/api/userstub', getStubUsers);

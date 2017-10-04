@@ -7,7 +7,7 @@ const loginApiTest = () => {
     await app.db.pRun('DELETE FROM users');
     // create test user
     await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'password',

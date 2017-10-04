@@ -5,7 +5,7 @@ const createUserApiTest = () => {
   it('should create new user', async () => {
     expect.assertions(5);
     const res = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'password',
@@ -22,7 +22,7 @@ const createUserApiTest = () => {
   it('should fail if no data sent', async () => {
     expect.assertions(2);
     const res = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({});
     expect(res.statusCode).toEqual(400);
     expect(res.text).toEqual('No data sent.');
@@ -31,7 +31,7 @@ const createUserApiTest = () => {
   it('should fail when invalid data supplied', async () => {
     expect.assertions(6);
     const firstUser = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'user',
         password: 'password',
@@ -41,7 +41,7 @@ const createUserApiTest = () => {
     expect(firstUser.text).toEqual('Data is invalid, check your validation services.');
 
     const secondUser = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'pass',
@@ -51,7 +51,7 @@ const createUserApiTest = () => {
     expect(secondUser.text).toEqual('Data is invalid, check your validation services.');
 
     const thirdUser = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'password',
@@ -64,7 +64,7 @@ const createUserApiTest = () => {
   it('should fail when user exists', async () => {
     expect.assertions(6);
     const firstUser = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'password',
@@ -74,7 +74,7 @@ const createUserApiTest = () => {
     expect(firstUser.text).toEqual('Username or email are already taken.');
 
     const secondUser = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'password',
@@ -84,7 +84,7 @@ const createUserApiTest = () => {
     expect(secondUser.text).toEqual('Username or email are already taken.');
 
     const thirdUser = await request(app)
-      .post('/api/users/')
+      .post('/api/register/')
       .send({
         username: 'username1',
         password: 'password',

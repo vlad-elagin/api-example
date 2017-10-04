@@ -21,7 +21,7 @@ const getUserApiTest = () => {
   it('gets array of right length and right shape', async () => {
     // create test user
     await request(app)
-      .post('/api/users')
+      .post('/api/register/')
       .send({
         username: 'username',
         password: 'password',
