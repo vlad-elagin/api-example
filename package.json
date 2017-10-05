@@ -30,6 +30,7 @@
     "body-parser": "^1.17.1",
     "es6-promisify": "^5.0.0",
     "express": "^4.15.2",
+    "express-jwt": "^5.3.0",
     "jsonwebtoken": "^8.0.1",
     "morgan": "^1.7.0",
     "rimraf": "^2.6.1",
@@ -93,9 +94,6 @@
     "testEnvironment": "node",
     "modulePathIgnorePatterns": [
       "dist"
-    ],
-    "setupFiles": [
-      "./src/db/db.js"
     ]
   },
   "directories": {
