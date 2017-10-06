@@ -6,7 +6,7 @@ const getUserApiTest = () => {
   // clear db
   let token;
   beforeAll(async (done) => {
-    token = await prepareUser();
+    ({ token } = await prepareUser());
     done();
   });
 

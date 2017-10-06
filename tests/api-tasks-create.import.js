@@ -5,7 +5,7 @@ import prepareUser from './_main.test';
 const createTaskApiTest = () => {
   let token;
   beforeAll(async (done) => {
-    token = await prepareUser();
+    ({ token } = await prepareUser());
     done();
   });
 

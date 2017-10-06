@@ -36,8 +36,7 @@ const prepareUser = async () => {
       login: 'username',
       password: 'password',
     });
-  const { token } = JSON.parse(res.text);
-  return token;
+  return JSON.parse(res.text);
 };
 
 /* ===================================================
@@ -62,13 +61,16 @@ describe('API tests', () => {
   });
 
   describe('Tasks API', () => {
+    beforeEach(async () => {
+      await app.db.pRun('DELETE FROM tasks');
+    });
     describe('Task creating', createTaskApiTest);
     describe('Tasks fetching', getTasksApiTest);
   });
 
   // run those last as they close db connection
   // will fail if some of previous tests failed, disable in this case
-  // describe('Database initial configuration', prepareDatabaseTest);
+  describe('Database initial configuration', prepareDatabaseTest);
 });
 
 export default prepareUser;
