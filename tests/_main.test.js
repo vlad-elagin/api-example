@@ -13,7 +13,11 @@ import getUserApiTest from './api-users-get.import';
 import loginApiTest from './api-auth-login.import';
 import protectedApiRoutesTest from './api-protected-routes.import';
 
-// preparing test user function to use in 'beforeAll' for protected routes
+// tasks api
+import getTasksApiTest from './api-tasks-get.import';
+import createTaskApiTest from './api-tasks-create.import';
+
+// receiving token for protected routes
 const prepareUser = async () => {
   // clear db
   await app.db.pRun('DELETE FROM users');
@@ -48,8 +52,8 @@ describe('API tests', () => {
   });
 
   describe('Users API', () => {
-    describe('User creation API', createUserApiTest);
-    describe('Users fetching API', getUserApiTest);
+    describe('User creation', createUserApiTest);
+    describe('Users fetching', getUserApiTest);
   });
 
   describe('Auth API', () => {
@@ -57,9 +61,14 @@ describe('API tests', () => {
     describe('Protected routes', protectedApiRoutesTest);
   });
 
+  describe('Tasks API', () => {
+    describe('Task creating', createTaskApiTest);
+    describe('Tasks fetching', getTasksApiTest);
+  });
+
   // run those last as they close db connection
-  // fails sometimes, dont know why, disable in this case
-  describe('Database initial configuration', prepareDatabaseTest);
+  // will fail if some of previous tests failed, disable in this case
+  // describe('Database initial configuration', prepareDatabaseTest);
 });
 
 export default prepareUser;

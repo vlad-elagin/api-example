@@ -28,51 +28,29 @@ const createUserApiTest = () => {
     expect(res.text).toEqual('No data sent.');
   });
 
-  it('should fail when invalid data supplied', async () => {
-    expect.assertions(6);
-    const firstUser = await request(app)
-      .post('/api/register/')
-      .send({
-        username: 'user',
-        password: 'password',
-        email: 'test@test.com',
-      });
-    expect(firstUser.statusCode).toEqual(400);
-    expect(firstUser.text).toEqual('Data is invalid, check your validation services.');
-
-    const secondUser = await request(app)
-      .post('/api/register/')
-      .send({
-        username: 'username',
-        password: 'pass',
-        email: 'test@test.com',
-      });
-    expect(secondUser.statusCode).toEqual(400);
-    expect(secondUser.text).toEqual('Data is invalid, check your validation services.');
-
-    const thirdUser = await request(app)
-      .post('/api/register/')
-      .send({
-        username: 'username',
-        password: 'password',
-        email: 'testtest.com',
-      });
-    expect(thirdUser.statusCode).toEqual(400);
-    expect(thirdUser.text).toEqual('Data is invalid, check your validation services.');
+  it('should fail when invalid data supplied', async (done) => {
+    const validData = {
+      username: 'username',
+      password: 'password',
+      email: 'test@test.com',
+    };
+    const invalidDataSamples = [
+      { username: 'user' },
+      { password: 'pass' },
+      { email: 'testtest.co' },
+    ];
+    invalidDataSamples.forEach(async (sample) => {
+      const res = await request(app)
+        .post('/api/register/')
+        .send({ ...validData, ...sample });
+      expect(res.statusCode).toEqual(400);
+      expect(res.text).toEqual('Data is invalid, check your validation services.');
+    });
+    done();
   });
 
-  it('should fail when user exists', async () => {
-    expect.assertions(6);
-    const firstUser = await request(app)
-      .post('/api/register/')
-      .send({
-        username: 'username',
-        password: 'password',
-        email: 'test@test.com',
-      });
-    expect(firstUser.statusCode).toEqual(400);
-    expect(firstUser.text).toEqual('Username or email are already taken.');
-
+  it('should fail when user exists', async (done) => {
+    // new email with old username
     const secondUser = await request(app)
       .post('/api/register/')
       .send({
@@ -82,7 +60,7 @@ const createUserApiTest = () => {
       });
     expect(secondUser.statusCode).toEqual(400);
     expect(secondUser.text).toEqual('Username or email are already taken.');
-
+    // new username with old email
     const thirdUser = await request(app)
       .post('/api/register/')
       .send({
@@ -92,6 +70,7 @@ const createUserApiTest = () => {
       });
     expect(thirdUser.statusCode).toEqual(400);
     expect(thirdUser.text).toEqual('Username or email are already taken.');
+    done();
   });
 };
 

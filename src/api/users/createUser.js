@@ -42,7 +42,7 @@ const createUser = async (req, res) => {
       password: bcrypt.hashSync(req.body.password),
     };
     await app.db.pRun(`
-      INSERT INTO USERS (id, username, email, password)
+      INSERT INTO users (id, username, email, password)
       VALUES (
         "${newUser.id}",
         "${newUser.username}",

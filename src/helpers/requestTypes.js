@@ -22,6 +22,14 @@ const requestTypes = {
       return true;
     },
   },
+  NonBlankString: {
+    typeOf: 'String',
+    validate: string => (string.trim().length > 0),
+  },
+  PriorityStrings: {
+    typeOf: 'String',
+    validate: priority => (['low', 'medium', 'high'].indexOf(priority) !== -1),
+  },
 };
 
 export default requestTypes;

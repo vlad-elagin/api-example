@@ -23,7 +23,7 @@ routes.get('/', (req, res) => {
 routes.post('/api/login', loginUser);
 routes.post('/api/register/', createUser);
 
-routes.route('/api/task/')
+routes.route('/api/tasks/')
   .get(getTasks)
   .post(createTask)
   .put(updateTask)

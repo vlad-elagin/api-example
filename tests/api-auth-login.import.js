@@ -1,18 +1,10 @@
 import request from 'supertest';
 import app from './../src/app';
+import prepareUser from './_main.test';
 
 const loginApiTest = () => {
   beforeAll(async (done) => {
-    // clear db
-    await app.db.pRun('DELETE FROM users');
-    // create test user
-    await request(app)
-      .post('/api/register/')
-      .send({
-        username: 'username',
-        password: 'password',
-        email: 'test@test.com',
-      });
+    await prepareUser();
     done();
   });
 

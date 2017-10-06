@@ -65,4 +65,28 @@ Response is:
 
 ## Protected endpoints
 
-Work in progress...
+### Tasks - Create
+```
+POST /api/tasks/
+```
+Creates new task. Supplied data should have following shape:
+```
+{
+  "header": "Task title.", // non blank string
+  "description": "", // string (can be empty)
+  "content": "I need to go for milk.", // non blank string
+  "priority": "low", // one of 'low', 'medium', 'high'
+  "isPersonal": false, // boolean
+  "executor": "id of user to assign on this task", // if null - requesting user will be assigned
+  "completed": false // boolean
+}
+```
+Response would be object of this task with task id.
+
+### Tasks - Get
+```
+GET /api/tasks/
+GET /api/tasks/?user_id=<user id string>
+```
+Gets an array of tasks. If no user id specified - returns tasks of currently logged in user.
+If fetching tasks of another user - returns his non-private tasks list.
