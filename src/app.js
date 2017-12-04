@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(jwt({ secret: jwtSecret }).unless({
   path: [
     // unprotected routes
+    '/',
     '/api/login/',
     '/api/register/',
     // temporary stub routes
