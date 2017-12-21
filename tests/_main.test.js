@@ -16,6 +16,7 @@ import protectedApiRoutesTest from './api-protected-routes.import';
 // tasks api
 import getTasksApiTest from './api-tasks-get.import';
 import createTaskApiTest from './api-tasks-create.import';
+import updateTaskApiTest from './api-tasks-update.import';
 
 // receiving token for protected routes
 const prepareUser = async () => {
@@ -66,6 +67,7 @@ describe('API tests', () => {
     });
     describe('Task creating', createTaskApiTest);
     describe('Tasks fetching', getTasksApiTest);
+    describe('Task updating', updateTaskApiTest);
   });
 
   // run those last as they close db connection

@@ -8,7 +8,6 @@ import deleteTask from './api/tasks/deleteTask';
 
 // USERS CRUD
 import getUsers from './api/users/getUsers';
-import getStubUsers from './api/users/usersStub';
 import createUser from './api/users/createUser';
 
 // AUTH CRUD
@@ -31,8 +30,5 @@ routes.route('/api/tasks/')
 
 routes.route('/api/users')
   .get(getUsers);
-
-// temp
-routes.get('/api/userstub', getStubUsers);
 
 export default routes;
