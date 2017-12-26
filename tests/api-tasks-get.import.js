@@ -4,18 +4,16 @@ import prepareUser from './_main.test';
 
 const getTasksApiTest = () => {
   let token;
-  let user;
   const stubTask = {
-    header: 'My public task',
-    description: '',
-    content: 'I need to go for milk',
+    heading: 'My public task',
+    description: 'I need to go for milk',
     priority: 'low',
     isPersonal: false,
-    executor: null,
+    assignee: null,
     completed: false,
   };
   beforeAll(async (done) => {
-    ({ token, user } = await prepareUser());
+    ({ token } = await prepareUser());
     done();
   });
   it('Should get empty array if no tasks present', async () => {

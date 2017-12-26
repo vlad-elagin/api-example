@@ -2,14 +2,13 @@ import { prepareTables, connectToDatabase } from './../src/db/db';
 
 const tasksSchema = {
   id: 'TEXT',
-  header: 'TEXT',
+  heading: 'TEXT',
   description: 'TEXT',
-  content: 'TEXT',
   priority: 'TEXT',
   created: 'TEXT',
-  creator: 'TEXT',
+  author: 'TEXT',
   isPersonal: 'INTEGER',
-  executor: 'TEXT',
+  assignee: 'TEXT',
   completed: 'INTEGER',
 };
 

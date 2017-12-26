@@ -11,12 +11,11 @@ const createTask = async (req, res) => {
   }
   // type checking
   const isValidRequest = typeCheck(`{
-    header: NonBlankString,
+    heading: NonBlankString,
     description: String,
-    content: NonBlankString,
     priority: PriorityStrings,
     isPersonal: Boolean,
-    executor: NonBlankString | Null,
+    assignee: NonBlankString | Null,
     completed: Boolean
   }`, req.body, { customTypes: { ...requestTypes } });
   if (!isValidRequest) {
@@ -24,44 +23,43 @@ const createTask = async (req, res) => {
     return;
   }
   // check if executor exists
-  let executor;
-  if (req.body.executor) {
+  let assignee;
+  if (req.body.assignee) {
     try {
-      const executorExists = await app.db.pGet(`SELECT id FROM users WHERE id="${req.body.executor}"`);
+      const executorExists = await app.db.pGet(`SELECT id FROM users WHERE id="${req.body.assignee}"`);
       if (!executorExists) {
         res.status(400).send('Executor not found.');
         return;
       }
-      executor = executorExists;
+      assignee = executorExists;
     } catch (err) {
       res.status(500).send('Unlucky, database error.');
       return;
     }
   } else {
-    executor = req.user.userId;
+    assignee = req.user.userId;
   }
   // create task
   const task = {
     ...req.body,
     id: uuid.v4(),
     created: new Date(),
-    creator: req.user.userId,
-    executor,
+    author: req.user.userId,
+    assignee,
   };
   try {
     await app.db.pRun(`
       INSERT INTO tasks
-      (id, header, description, content, priority, created, creator, isPersonal, executor, completed)
+      (id, heading, description, priority, created, author, isPersonal, assignee, completed)
       VALUES (
         "${task.id}",
-        "${task.header}",
+        "${task.heading}",
         "${task.description}",
-        "${task.content}",
         "${task.priority}",
         "${task.created}",
-        "${task.creator}",
+        "${task.author}",
         "${task.isPersonal}",
-        "${task.executor}",
+        "${task.assignee}",
         "${task.completed}"
       )
     `);

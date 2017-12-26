@@ -22,21 +22,19 @@ const createTaskApiTest = () => {
   it('Should fail when invalid data supplied', async (done) => {
     // check every request field
     const validData = {
-      header: 'My test task',
-      description: '',
-      content: 'I need to go for milk',
+      heading: 'My test task',
+      description: 'I need to go for milk',
       priority: 'low',
       isPersonal: true,
-      executor: 'me',
+      author: 'me',
       completed: false,
     };
     const invalidDataSamples = [
-      { header: '' },
+      { heading: '' },
       { description: false },
-      { content: '' },
       { priority: 'wrong priority name' },
       { isPersonal: 'true?' },
-      { executor: 123 },
+      { author: 123 },
       { completed: 'false?' },
     ];
     invalidDataSamples.forEach(async (sample) => {
@@ -50,16 +48,15 @@ const createTaskApiTest = () => {
     done();
   });
 
-  it('Should fail if executor not found', async (done) => {
+  it('Should fail if assignee not found', async (done) => {
     const res = await request(app)
       .post('/api/tasks/')
       .send({
-        header: 'My test task',
-        description: '',
-        content: 'I need to go for milk',
+        heading: 'My test task',
+        description: 'I need to go for milk',
         priority: 'low',
         isPersonal: true,
-        executor: 'me',
+        assignee: 'me',
         completed: false,
       })
       .set('Authorization', `Bearer ${token}`);
@@ -68,15 +65,14 @@ const createTaskApiTest = () => {
     done();
   });
 
-  it('Should create task with no executor specified', async () => {
-    expect.assertions(12);
+  it('Should create task with no assignee specified', async () => {
+    expect.assertions(10);
     const requestData = {
-      header: 'My test task',
-      description: '',
-      content: 'I need to go for milk',
+      heading: 'My test task',
+      description: 'I need to go for milk',
       priority: 'low',
       isPersonal: true,
-      executor: null,
+      assignee: null,
       completed: false,
     };
     const res = await request(app)
@@ -85,20 +81,18 @@ const createTaskApiTest = () => {
       .set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toBe(200);
     const response = JSON.parse(res.text);
-    expect(response.executor).toBeDefined();
+    expect(response.assignee).toBeDefined();
     expect(response.id).toBeDefined();
-    expect(response.header).toEqual(requestData.header);
+    expect(response.heading).toEqual(requestData.heading);
     expect(response.description).toEqual(requestData.description);
-    expect(response.content).toEqual(requestData.content);
     expect(response.priority).toEqual(requestData.priority);
     expect(response.created).toBeDefined();
-    expect(response.creator).toBeDefined();
+    expect(response.author).toBeDefined();
     expect(typeof response.isPersonal).toBe('boolean');
     expect(typeof response.completed).toBe('boolean');
-    expect(response.executor).toBeDefined();
   });
 
-  it('Should create task with specified executor', async (done) => {
+  it('Should create task with specified assignee', async (done) => {
     // create another user to be assigned for task
     const user = await request(app)
       .post('/api/register/')
@@ -112,19 +106,18 @@ const createTaskApiTest = () => {
     const res = await request(app)
       .post('/api/tasks/')
       .send({
-        header: 'My test task',
-        description: '',
-        content: 'I need to go for milk',
+        heading: 'My test task',
+        description: 'I need to go for milk',
         priority: 'low',
         isPersonal: true,
-        executor: userId,
+        assignee: userId,
         completed: false,
       })
       .set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toBe(200);
     const response = JSON.parse(res.text);
-    expect(response.executor).toBeDefined();
-    expect(response.executor).not.toEqual(response.creator);
+    expect(response.assignee).toBeDefined();
+    expect(response.assignee).not.toEqual(response.author);
     done();
   });
 };

@@ -8,6 +8,7 @@ const updateTask = (req, res) => {
     res.status(400).send('No data sent.');
     return;
   }
+  
   console.log('UPDATING TASK'); // eslint-disable-line no-console
   res.sendStatus(200);
 };

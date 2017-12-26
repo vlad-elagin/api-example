@@ -11,7 +11,7 @@ const getTasks = async (req, res) => {
       }
       // get his tasks excluding personal ones
       const tasks = await app.db.pAll(`
-        SELECT * FROM tasks WHERE creator="${req.query.user_id}" AND isPersonal="false"
+        SELECT * FROM tasks WHERE author="${req.query.user_id}" AND isPersonal="false"
       `);
       if (tasks.length === 0) {
         res.status(200).send('Specified user doesn\'t have public tasks.');
@@ -25,7 +25,7 @@ const getTasks = async (req, res) => {
   }
   // get tasks of requesting user
   try {
-    const tasks = await app.db.pAll(`SELECT * FROM tasks WHERE creator="${req.user.userId}"`);
+    const tasks = await app.db.pAll(`SELECT * FROM tasks WHERE author="${req.user.userId}"`);
     if (tasks) res.status(200).send(tasks);
   } catch (err) {
     res.status(500).send('Unlucky, database error.');
