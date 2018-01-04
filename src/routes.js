@@ -25,7 +25,7 @@ routes.post('/api/register/', createUser);
 routes.route('/api/tasks/')
   .get(getTasks)
   .post(createTask)
-  .put(updateTask)
+  .patch(updateTask)
   .delete(deleteTask);
 
 routes.route('/api/users')

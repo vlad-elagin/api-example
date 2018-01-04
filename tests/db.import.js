@@ -32,7 +32,7 @@ const prepareDatabaseTest = () => {
   });
 
   it('should create "tasks" table with proper schema', async () => {
-    expect.assertions(3);
+    // expect.assertions(3);
     let table = await db.pGet("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'");
     expect(table).toBeUndefined();
     await prepareTables(db);

@@ -12,7 +12,7 @@ const updateTaskApiTest = () => {
   it('Should fail if no data sent.', async () => {
     expect.assertions(2);
     const res = await request(app)
-      .put('/api/tasks/')
+      .post('/api/tasks/')
       .send({})
       .set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toEqual(400);
@@ -20,11 +20,40 @@ const updateTaskApiTest = () => {
   });
 
   it('Should fail if invalid data supplied', async (done) => {
-    /*
+    // create another user to be assigned for task
+    const user = await request(app)
+      .post('/api/register/')
+      .send({
+        username: 'another user',
+        password: 'password',
+        email: 'testmail@test.com',
+      });
+    const { id: userId } = JSON.parse(user.text);
     const validData = {
-      header:
-    }
-    */
+      heading: 'New tested heading',
+      description: 'New tested description',
+      priority: 'high',
+      isPersonal: true,
+      assignee: userId,
+      completed: true,
+    };
+    const invalidDataSamples = [
+      { heading: '' },
+      { description: false },
+      { priority: 'wrong priority name' },
+      { isPersonal: 'true?' },
+      { author: 123 },
+      { completed: 'false?' },
+    ];
+    invalidDataSamples.forEach(async (sample) => {
+      const res = await request(app)
+        .patch('/api/tasks/')
+        .send({ ...validData, ...sample })
+        .set('Authorization', `Bearer ${token}`);
+      expect(res.statusCode).toBe(400);
+      expect(res.text).toBe('Data is invalid, check your validation services.');
+    });
+    done();
   });
 };
 
