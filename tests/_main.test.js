@@ -72,7 +72,7 @@ describe('API tests', () => {
 
   // run those last as they close db connection
   // will fail if some of previous tests failed, disable in this case
-  describe('Database initial configuration', prepareDatabaseTest);
+  // describe('Database initial configuration', prepareDatabaseTest);
 });
 
 export default prepareUser;

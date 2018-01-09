@@ -1,5 +1,6 @@
 import { typeCheck } from 'type-check';
 import requestTypes from './../../helpers/requestTypes';
+import buildQuery from './../../helpers/queryBuilder';
 import app from './../../app';
 
 const updateTask = async (req, res) => {
@@ -8,9 +9,26 @@ const updateTask = async (req, res) => {
     res.status(400).send('No data sent.');
     return;
   }
+  // check that task id is sent
+  if (!req.body.id) {
+    res.status(400).send('Wrong task ID.');
+    return;
+  }
+  // check task existense
+  const taskToUpdate = await app.db.pGet(`SELECT * FROM tasks WHERE id="${req.body.id}"`);
+  if (!taskToUpdate) {
+    res.status(400).send('Wrong task ID.');
+    return;
+  }
+  // check if requesting user is author of task
+  if (taskToUpdate.author !== req.user.userId) {
+    res.status(403).send('You are not permitted to change this task.');
+    return;
+  }
   // type checking
   // undefined means 'leave unchanged', null - set to null
   const isValidRequest = typeCheck(`{
+    id: NonBlankString,
     heading: Maybe NonBlankString,
     description: Maybe String,
     priority: Maybe PriorityStrings,
@@ -24,11 +42,11 @@ const updateTask = async (req, res) => {
   }
   // if user tries to change assignee - check if new value exists
   let assignee;
-  if (req.body.assignee) {
+  if ('assignee' in req.body) {
     try {
       const assigneeExists = await app.db.pGet(`SELECT id FROM users WHERE id="${req.body.assignee}"`);
       if (!assigneeExists) {
-        res.status(400).send('Executor not found.');
+        res.status(400).send('Assignee not found.');
         return;
       }
       assignee = assigneeExists;
@@ -37,6 +55,28 @@ const updateTask = async (req, res) => {
       return;
     }
   }
+  // prepare sql request for updating
+  const fieldsAvailableForUpdate = [
+    'heading',
+    'description',
+    'priority',
+    'isPersonal',
+    'completed',
+  ];
+  const updateSql = buildQuery(Object.assign({}, req.body, assignee), fieldsAvailableForUpdate);
+  console.log(updateSql);
+  // update task record in db
+  try {
+    await app.db.pRun(`
+      UPDATE tasks
+      SET ${updateSql}
+      WHERE id="${req.body.id}"
+    `);
+  } catch (err) {
+    res.status(500).send('Unlucky, database error.');
+    return;
+  }
+
 
   console.log('UPDATING TASK'); // eslint-disable-line no-console
   res.sendStatus(200);

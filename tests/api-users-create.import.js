@@ -28,7 +28,7 @@ const createUserApiTest = () => {
     expect(res.text).toEqual('No data sent.');
   });
 
-  it('should fail when invalid data supplied', async (done) => {
+  it('should fail when invalid data supplied', (done) => {
     const validData = {
       username: 'username',
       password: 'password',
