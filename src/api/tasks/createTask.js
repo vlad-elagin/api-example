@@ -1,5 +1,6 @@
 import { typeCheck } from 'type-check';
 import * as uuid from 'uuid';
+import parseBooleans from './../../helpers/parseBooleans';
 import requestTypes from './../../helpers/requestTypes';
 import app from './../../app';
 
@@ -63,10 +64,10 @@ const createTask = async (req, res) => {
         "${task.completed}"
       )
     `);
-    const newTask = await app.db.pGet(`SELECT * FROM tasks WHERE id="${task.id}"`);
-    // convert strings to bool
-    newTask.isPersonal = newTask.isPersonal === 'true';
-    newTask.completed = newTask.completed === 'true';
+    let newTask = await app.db.pGet(`SELECT * FROM tasks WHERE id="${task.id}"`);
+    newTask = parseBooleans(newTask, ['completed', 'isPersonal']);
+    console.log('CREATED NEW TASK');
+    console.log(newTask);
     res.status(200).send(newTask);
   } catch (err) {
     res.status(500).send('Unlucky, database error.');

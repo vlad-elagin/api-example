@@ -95,7 +95,6 @@ const updateTaskApiTest = () => {
   });
 
   it('Should fail when invalid data supplied', (done) => {
-    expect.assertions(10);
     const validData = {
       id: task.id,
       heading: 'New tested heading',
@@ -124,13 +123,8 @@ const updateTaskApiTest = () => {
     Promise.all(promises).then(() => { done(); });
   });
 
-  // user can update only heading, description, priority,
-  // personality, and completed fields
-  // it('Shouldn\'t update protected task fields', async () => {
-  //
-  // });
-
-  it('Should update task', async (done) => {
+  it('Should update task', async () => {
+    expect.assertions(8);
     const res = await request(app)
       .patch('/api/tasks/')
       .send({
@@ -144,7 +138,14 @@ const updateTaskApiTest = () => {
       })
       .set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toBe(200);
-    done();
+    const updatedTask = JSON.parse(res.text);
+    expect(updatedTask.heading).toEqual('Updated heading');
+    expect(updatedTask.description).toEqual('Updated description');
+    expect(updatedTask.priority).toEqual('low');
+    expect(updatedTask.isPersonal).toBe(false);
+    expect(updatedTask.assignee).not.toBe(updatedTask.author);
+    expect(updatedTask.assignee).toEqual(anotherUser.id);
+    expect(updatedTask.completed).toBe(false);
   });
 };
 

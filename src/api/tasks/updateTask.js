@@ -1,6 +1,7 @@
 import { typeCheck } from 'type-check';
 import requestTypes from './../../helpers/requestTypes';
 import buildQuery from './../../helpers/queryBuilder';
+import parseBooleans from './../../helpers/parseBooleans';
 import app from './../../app';
 
 const updateTask = async (req, res) => {
@@ -62,9 +63,12 @@ const updateTask = async (req, res) => {
     'priority',
     'isPersonal',
     'completed',
+    'assignee',
   ];
-  const updateSql = buildQuery(Object.assign({}, req.body, assignee), fieldsAvailableForUpdate);
-  console.log(updateSql);
+  const updateSql = buildQuery(
+    Object.assign({}, req.body, { assignee: assignee.id }),
+    fieldsAvailableForUpdate,
+  );
   // update task record in db
   try {
     await app.db.pRun(`
@@ -72,14 +76,12 @@ const updateTask = async (req, res) => {
       SET ${updateSql}
       WHERE id="${req.body.id}"
     `);
+    let updatedTask = await app.db.pGet(`SELECT * FROM tasks WHERE id="${req.body.id}"`);
+    updatedTask = parseBooleans(updatedTask, ['completed', 'isPersonal']);
+    res.status(200).send(updatedTask);
   } catch (err) {
     res.status(500).send('Unlucky, database error.');
-    return;
   }
-
-
-  console.log('UPDATING TASK'); // eslint-disable-line no-console
-  res.sendStatus(200);
 };
 
 export default updateTask;
