@@ -27,14 +27,13 @@ const prepareTables = async (db) => {
       db.pRun(`
         CREATE TABLE tasks (
           id TEXT,
-          header TEXT,
+          heading TEXT,
           description TEXT,
-          content TEXT,
           priority TEXT,
           created TEXT,
-          creator TEXT,
+          author TEXT,
           isPersonal INTEGER,
-          executor TEXT,
+          assignee TEXT,
           completed INTEGER
         )
       `);

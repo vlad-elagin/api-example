@@ -2,14 +2,13 @@ import { prepareTables, connectToDatabase } from './../src/db/db';
 
 const tasksSchema = {
   id: 'TEXT',
-  header: 'TEXT',
+  heading: 'TEXT',
   description: 'TEXT',
-  content: 'TEXT',
   priority: 'TEXT',
   created: 'TEXT',
-  creator: 'TEXT',
+  author: 'TEXT',
   isPersonal: 'INTEGER',
-  executor: 'TEXT',
+  assignee: 'TEXT',
   completed: 'INTEGER',
 };
 
@@ -33,7 +32,7 @@ const prepareDatabaseTest = () => {
   });
 
   it('should create "tasks" table with proper schema', async () => {
-    expect.assertions(3);
+    // expect.assertions(3);
     let table = await db.pGet("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'");
     expect(table).toBeUndefined();
     await prepareTables(db);
