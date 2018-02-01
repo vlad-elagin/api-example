@@ -90,3 +90,34 @@ GET /api/tasks/?user_id=<user id string>
 ```
 Gets an array of tasks. If no user id specified - returns tasks of currently logged in user.
 If fetching tasks of another user - returns his non-private tasks list.
+
+### Tasks - Update
+```
+PATCH /api/tasks/
+```
+Updates task with new fields. Only your own tasks can be modified! Required field is ID, updateable fields: 'heading', 'description', 'priority', 'isPersonal', 'assignee' and 'completed'.
+Request:
+```
+{
+  id: taskId,
+  heading: 'Updated heading',
+  description: 'Updated description',
+  priority: 'low',
+  isPersonal: false,
+  assignee: anotherId,
+  completed: false,
+}
+```
+Updated task object will be your response.
+
+### Tasks - Delete
+```
+DELETE /api/tasks/
+```
+Removes task from database. Specify task Id in request, like this:
+```
+{
+  id: taskId,
+}
+```
+No JSON response for this endpoint.

@@ -4,7 +4,6 @@ import prepareUser from './_main.test';
 
 const deleteTaskApiTest = () => {
   let token;
-  let task;
   let anotherUsersToken;
   beforeAll(async (done) => {
     // prepare main user before tests
@@ -25,19 +24,6 @@ const deleteTaskApiTest = () => {
         password: 'password',
       });
     ({ token: anotherUsersToken } = JSON.parse(rawLoggedAnotherUser.text));
-    // prepare fresh task
-    const res = await request(app)
-      .post('/api/tasks/')
-      .send({
-        heading: 'New test heading',
-        description: 'New test description',
-        priority: 'high',
-        isPersonal: true,
-        assignee: null,
-        completed: true,
-      })
-      .set('Authorization', `Bearer ${token}`);
-    task = JSON.parse(res.text);
     done();
   });
 
@@ -87,12 +73,25 @@ const deleteTaskApiTest = () => {
 
   it('Should remove task', async () => {
     expect.assertions(2);
+    // prepare fresh task
     const res = await request(app)
-      .delete('/api/tasks/')
+      .post('/api/tasks/')
+      .send({
+        heading: 'New test heading',
+        description: 'New test description',
+        priority: 'high',
+        isPersonal: true,
+        assignee: null,
+        completed: true,
+      })
+      .set('Authorization', `Bearer ${token}`);
+    const task = JSON.parse(res.text);
+    const removeRes = await request(app)
+      .delete('/api/tasks')
       .send({ id: task.id })
       .set('Authorization', `Bearer ${token}`);
-    expect(res.statusCode).toBe(200);
-    expect(res.text).toBe('Task removed.');
+    expect(removeRes.statusCode).toBe(200);
+    expect(removeRes.text).toBe('Task removed.');
   });
 };
 
