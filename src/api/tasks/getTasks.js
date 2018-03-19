@@ -1,4 +1,4 @@
-import app from './../../app';
+import app from '@root/app';
 
 const getTasks = async (req, res) => {
   if (req.query && req.query.user_id) {

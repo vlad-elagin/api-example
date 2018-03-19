@@ -37,6 +37,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-jest": "^21.0.2",
+    "babel-plugin-module-resolver": "^3.1.0",
     "babel-register": "^6.24.1",
     "dotenv": "^4.0.0",
     "eslint": "^4.8.0",
@@ -45,6 +46,7 @@
     "eslint-plugin-jest": "^21.0.2",
     "eslint-watch": "^3.1.0",
     "jest": "^21.0.2",
+    "module-resolver": "^1.0.0",
     "nodemon": "^1.11.0",
     "supertest": "^3.0.0"
   },
@@ -60,7 +62,22 @@
       ]
     ],
     "plugins": [
-      "transform-object-rest-spread"
+      "transform-object-rest-spread",
+      [
+        "module-resolver",
+        {
+          "root": [
+            "../../"
+          ],
+          "alias": {
+            "@api": "./src/api",
+            "@config": "./src/config",
+            "@helpers": "./src/helpers",
+            "@db": "./src/db",
+            "@root": "./src"
+          }
+        }
+      ]
     ]
   },
   "eslintConfig": {
@@ -83,7 +100,10 @@
     ],
     "rules": {
       "jest/no-focused-tests": 2,
-      "jest/no-identical-title": 2
+      "jest/no-identical-title": 2,
+      "import/no-extraneous-dependencies": 0,
+      "import/extensions": 0,
+      "import/no-unresolved": 0
     }
   },
   "jest": {

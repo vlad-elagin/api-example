@@ -1,4 +1,4 @@
-import app from './../../app';
+import app from '@root/app';
 
 const deleteTask = async (req, res) => {
   if (!req.body || !req.body.id || typeof req.body.id !== 'string') {

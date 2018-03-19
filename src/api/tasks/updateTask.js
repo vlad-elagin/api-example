@@ -1,8 +1,8 @@
 import { typeCheck } from 'type-check';
-import requestTypes from './../../helpers/requestTypes';
-import buildQuery from './../../helpers/queryBuilder';
-import parseBooleans from './../../helpers/parseBooleans';
-import app from './../../app';
+import requestTypes from '@helpers/requestTypes';
+import buildQuery from '@helpers/queryBuilder';
+import parseBooleans from '@helpers/parseBooleans';
+import app from '@root/app';
 
 const updateTask = async (req, res) => {
   // check request data

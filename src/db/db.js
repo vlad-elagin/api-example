@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 import promisify from 'es6-promisify';
-import app from './../app';
+import app from '@root/app';
 
 const connectToDatabase = () => {
   let db;

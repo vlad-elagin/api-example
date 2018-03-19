@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
-import app from './../../app';
-import { jwtSecret } from './../../config/auth';
+import app from '@root/app';
+import { jwtSecret } from '@config/auth';
 
 const loginUser = async (req, res) => {
   // check request data

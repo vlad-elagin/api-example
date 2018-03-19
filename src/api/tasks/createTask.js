@@ -1,8 +1,8 @@
 import { typeCheck } from 'type-check';
 import * as uuid from 'uuid';
-import parseBooleans from './../../helpers/parseBooleans';
-import requestTypes from './../../helpers/requestTypes';
-import app from './../../app';
+import parseBooleans from '@helpers/parseBooleans';
+import requestTypes from '@helpers/requestTypes';
+import app from '@root/app';
 
 const createTask = async (req, res) => {
   // check request data

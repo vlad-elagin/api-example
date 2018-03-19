@@ -1,8 +1,8 @@
 import { typeCheck } from 'type-check';
 import * as uuid from 'uuid';
 import bcrypt from 'bcrypt-nodejs';
-import requestTypes from './../../helpers/requestTypes';
-import app from './../../app';
+import requestTypes from '@helpers/requestTypes';
+import app from '@root/app';
 
 const createUser = async (req, res) => {
   // check request data

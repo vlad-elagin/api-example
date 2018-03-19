@@ -2,9 +2,10 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import jwt from 'express-jwt';
-import routes from './routes';
-import db from './db/db'; // eslint-disable-line no-unused-vars
-import { jwtSecret } from './config/auth';
+// eslint-disable-next-line no-unused-vars
+import db from '@db/db';
+import routes from '@root/routes';
+import { jwtSecret } from '@config/auth';
 
 const app = express();
 app.disable('x-powered-by');
