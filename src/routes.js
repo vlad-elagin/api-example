@@ -20,9 +20,9 @@ routes.get('/', (req, res) => {
 });
 
 routes.post('/api/login', loginUser);
-routes.post('/api/register/', createUser);
+routes.post('/api/register', createUser);
 
-routes.route('/api/tasks/')
+routes.route('/api/tasks')
   .get(getTasks)
   .post(createTask)
   .patch(updateTask)

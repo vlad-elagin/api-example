@@ -17,7 +17,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // protecting routes from unauthorized usage
-app.use(jwt({ secret: jwtSecret }).unless({
+app.use(jwt({
+  secret: jwtSecret,
+}).unless({
   path: [
     // unprotected routes
     '/',
@@ -30,8 +32,6 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     res.status(401).send('Auth token is missing or invalid.');
   }
 });
-
-// app.use(express.static(path.join(__dirname, '../public')));
 
 // Routes
 app.use('/', routes);
