@@ -66,7 +66,7 @@ const updateTask = async (req, res) => {
     'assignee',
   ];
   const updateSql = buildQuery(
-    Object.assign({}, req.body, { assignee: assignee.id }),
+    Object.assign({}, req.body, { assignee: assignee ? assignee.id : req.user.userId }),
     fieldsAvailableForUpdate,
   );
   // update task record in db
